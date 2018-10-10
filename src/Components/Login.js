@@ -21,29 +21,41 @@ class Login extends React.Component {
           })
         } */
       }
+
       changeState = (field) => (event) => this.setState({
         formData: {
           ...this.state.formData,
-          [field]: event.target.value,
+          [field]: event.target.value
         }
       })
     render(){
+        const {islogged, currentUser}= this.props
         return (
-            <form onSubmit={this.submit}>
-                <div>
-                    <label>Login&nbsp;<input value={this.state.formData.login} onChange={this.changeState('login')} autoComplete="username"/></label>
-                </div>
-                <div>
-                    <label>Password&nbsp;
-                    <input type="password" value={this.state.formData.passwd} onChange={this.changeState('passwd')} autoComplete="current-password"/>
-                    </label>
-                </div>
-                <div>
-                    <input type="submit" value="Login" />
-                </div>
-            </form>
+            <div>
+                {
+                    islogged ?
+                    <p>Hola    {currentUser.fullname}</p>  :
+                
+                <form onSubmit={this.submit}>
+                    <div>
+                        <label>Login&nbsp;<input type= "text" value={this.state.formData.login} onChange={this.changeState('login')} autoComplete="username"/></label>
+                    </div>
+                    <div>
+
+                        <label>Password&nbsp;
+                        <input type="password" value={this.state.formData.passwd} onChange={this.changeState('passwd')} autoComplete="current-password"/>
+                        </label>
+                    </div>
+                    <div>
+                        <input type="submit" value="Login" />
+                    </div>
+                </form>
+                }
+            </div>
         )
     }
 }
+//No hacer un componente nuevo ara el logged out, simplmente pintra otra cosa en el componente Login
+
 
 export default Login;
