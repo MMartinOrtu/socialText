@@ -34,7 +34,7 @@ class Login extends React.Component {
             <div>
                 {
                     islogged ?
-                    <p>Hola    {currentUser.fullname}</p>  :
+                    <p>Hola{currentUser.fullname}<span onClick={this.props.logOut}>Log out</span></p>  :
                 
                 <form onSubmit={this.submit}>
                     <div>
