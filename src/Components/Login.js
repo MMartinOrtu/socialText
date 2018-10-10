@@ -13,7 +13,6 @@ class Login extends React.Component {
         this.props.checklogin(login, passwd)
        /*  if (this.validate()) {
           const {login, passwd} = this.state.formData
-          
         } */
        /*  else{
           this.setState({
