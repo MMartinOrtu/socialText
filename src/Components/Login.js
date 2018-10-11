@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class Login extends React.Component {
     state = {
@@ -33,8 +34,10 @@ class Login extends React.Component {
             <div>
                 {
                     islogged ?
-                    <p>Hola{currentUser.fullname}<span onClick={this.props.logOut}>Log out</span></p>  :
-                
+                    <p>Hola{currentUser.fullname}                    
+                    <Link to="/"><span onClick={this.props.logOut}>Log out</span></Link>
+                    </p>  :
+
                 <form onSubmit={this.submit}>
                     <div>
                         <label>Login&nbsp;<input type= "text" value={this.state.formData.login} onChange={this.changeState('login')} autoComplete="username"/></label>
@@ -46,7 +49,8 @@ class Login extends React.Component {
                         </label>
                     </div>
                     <div>
-                        <input type="submit" value="Login" />
+                         <input type="submit" value="Login" />
+                        
                     </div>
                 </form>
                 }
@@ -54,7 +58,5 @@ class Login extends React.Component {
         )
     }
 }
-//No hacer un componente nuevo ara el logged out, simplmente pintra otra cosa en el componente Login
-
 
 export default Login;
