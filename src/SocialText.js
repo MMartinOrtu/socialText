@@ -15,6 +15,7 @@ class SocialText extends Component {
     currentUser:{},
     selectedAuthor:{},
     currentUserRequests:null,
+    userSubscriptions:null,
     messages:{}
   }
 
@@ -26,6 +27,25 @@ class SocialText extends Component {
         })
       }
     })
+    this.setSubscriptions()
+  }
+
+  setSubscriptions = () =>{
+    let  authorsWithSubscriptions = [...this.state.authors]
+    if(this.state.userSubscriptions){
+      this.state.userSubscriptions.forEach( subcription =>{
+         authorsWithSubscriptions.forEach( author =>{
+           if(author.id === subcription.id){
+             author.showMessages = true
+           }
+           return;
+         })
+      })
+      this.setState({
+        authors:authorsWithSubscriptions
+      })
+
+    }
   }
 
   checkLogin = (username, password) => {
@@ -34,14 +54,16 @@ class SocialText extends Component {
             let usertoDB = JSON.stringify(author)
             localStorage.setItem('currentUser', usertoDB)
             author.currentUser = true;
-            let currentUserRequests = localStorage.getItem(`relationsOf:${author.id}`)
+            let currentUserRequests = localStorage.getItem(`requestsOf:${author.id}`)
+            let userSubscriptions = localStorage.getItem(`susbcriptionsOf:${author.id}`)
             this.setState({
               islogged: true,
               currentUser:author,
-              currentUserRequests: JSON.parse(currentUserRequests)
+              currentUserRequests: JSON.parse(currentUserRequests),
+              userSubscriptions: JSON.parse(userSubscriptions)
           })
         }
-    })
+    }) 
   }
 
   logOut = () => {    
@@ -52,11 +74,11 @@ class SocialText extends Component {
       selectAuthor: null,
       currentUserRequests: null
     })
+    this.getData();
   }
   getData = async (currentUser) =>{
     let userLogged = false;
     if (currentUser){
-      console.log('ya habia un user')
       userLogged= true;
     }
     const response = await fetch('https://randomuser.me/api/?results=10&seed=abc')
@@ -66,7 +88,7 @@ class SocialText extends Component {
       results.forEach(author =>{
         let newAuthor = {};
         var {email, picture, name, login} = author;
-       
+
         if (userLogged && currentUser.id === login.uuid){
             newAuthor.currentUser = true
         }
@@ -85,39 +107,67 @@ class SocialText extends Component {
   }
 
   sendRequest = (author) => {
-    let authorRequests = JSON.parse(localStorage.getItem(`relationsOf:${author.id}`))
+    let authorRequests = JSON.parse(localStorage.getItem(`requestsOf:${author.id}`))
     if (!authorRequests){
-       localStorage.setItem(`relationsOf:${author.id}`, JSON.stringify([{user: this.state.currentUser, accepted: false}]))
+       localStorage.setItem(`requestsOf:${author.id}`, JSON.stringify([{user: this.state.currentUser, accepted: false}]))
     }else{
       authorRequests.push({user: this.state.currentUser, accepted: false})
-      localStorage.setItem(`relationsOf:${author.id}`, JSON.stringify(authorRequests))
+      localStorage.setItem(`requestsOf:${author.id}`, JSON.stringify(authorRequests))
+    }
+  }
+  handleSubscriptions = (user, accepted) => {
+    let userSubscription = JSON.parse(localStorage.getItem(`susbcriptionsOf:${user.id}`))
+    console.log(userSubscription)
+    if (!userSubscription){
+       localStorage.setItem(`susbcriptionsOf:${user.id}`, JSON.stringify([this.state.currentUser]))
+    }else{
+      if(accepted){
+        userSubscription.push(this.state.currentUser)
+        console.log('dentro', userSubscription)
+        localStorage.setItem(`susbcriptionsOf:${user.id}`, JSON.stringify(userSubscription))
+      }else{
+        let newUserSubscription = userSubscription.filter(user => user.id !== this.state.currentUser.id)
+        localStorage.setItem(`susbcriptionsOf:${user.id}`, JSON.stringify(newUserSubscription))
+      }
     }
   }
 
   toggleRequest = (id) =>{
-    console.log('entra')
-    let requestsCopy = this.state.currentUserRequests
-    requestsCopy.map(request => {
+    let currentUser = this.state.currentUser
+    let updateUserRequests = this.state.currentUserRequests
+    updateUserRequests.map(request => {
        if (request.user.id ===id){
-        !request.accepted ? request.accepted = true :request.accepted = false
+         if(!request.accepted){
+           request.accepted = true
+           this.handleSubscriptions(request.user, request.accepted)
+         }else{
+           request.accepted = false
+           this.handleSubscriptions(request.user, request.accepted)
+         }
        }
     })
     this.setState({
-      currentUserRequests: requestsCopy
+      currentUserRequests: updateUserRequests
     })
+    localStorage.setItem(`requestsOf:${currentUser.id}`, JSON.stringify(updateUserRequests))
   }
+/*   componentDidUpdate(){
 
+      this.setSubscriptions()
+    
+  } */
  componentDidMount() {
-  console.log('didmount')
         let userLogged = localStorage.getItem('currentUser')
         if (userLogged){
           let currentUserFromLS=JSON.parse(userLogged)
-          let currentUserRequests = localStorage.getItem(`relationsOf:${currentUserFromLS.id}`)
+          let currentUserRequests = localStorage.getItem(`requestsOf:${currentUserFromLS.id}`)
+          let userSubscriptions = localStorage.getItem(`susbcriptionsOf:${currentUserFromLS.id}`)
           this.getData(currentUserFromLS)
           this.setState({
               currentUser: currentUserFromLS,
               currentUserRequests: JSON.parse(currentUserRequests),
-               islogged: true})
+              userSubscriptions: JSON.parse(userSubscriptions),
+              islogged: true})
         } else {
           this.getData()
         }
@@ -138,7 +188,7 @@ class SocialText extends Component {
                 </div>
              )}/>
               <Route  exact path="/profile/:idauthor" render={() =>(
-                  <AuthorProfile author={this.state.selectedAuthor} sendRequest={this.sendRequest} />
+                  <AuthorProfile author={this.state.selectedAuthor} showMessages={this.state.showMessages} sendRequest={this.sendRequest} />
               )}/>
               <Route  exact path="/requests/:idauthor" render={() =>(
                   <Requests currentUserRequests={this.state.currentUserRequests} currentUser={this.state.currentUser} toggleRequest={this.toggleRequest} selectedAuthor={this.selectAuthor}/>
