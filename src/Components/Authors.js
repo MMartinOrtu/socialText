@@ -1,15 +1,15 @@
 import React from 'react';
 import Author from './Author';
-import { Link } from 'react-router-dom';
 
-const Authors = ({authors, islogged, selectedAuthor}) =>
-    islogged &&
+const Authors = ({authors, islogged, selectedAuthor, currentUser }) =>
     <div>
-         <ul>{
-          Object.keys(authors).map(author =>(
-            <Author key={author} author={authors[author]} selectedAuthor={selectedAuthor} />
-          ))
-        }
+         <ul>
+              {
+              authors.map(author =>(
+                author.currentUser ? null:
+                <Author key={author.id} author={author} selectedAuthor={selectedAuthor} />
+              ))
+              }
         </ul>
     </div>
 
