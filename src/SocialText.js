@@ -16,19 +16,29 @@ class SocialText extends Component {
     selectedAuthor:{},
     currentUserRequests:null,
     userSubscriptions:null,
-    messages:{}
+    messages:[]
   }
 
   selectAuthor = (id) =>{
     this.state.authors.forEach( author => {
       if(author.id === id){
-        this.setState({
-          selectedAuthor: author
-        })
+        this.setState({ selectedAuthor: author })
+        localStorage.setItem('selectedAuthor', JSON.stringify(author))
+        this.getMessages(author)
       }
     })
     this.setSubscriptions()
   }
+
+  getMessages = (author) => {
+    let authorMessages = localStorage.getItem(`messagesOf${author.id}`)
+        if(authorMessages){
+            this.setState({ messages: JSON.parse(authorMessages) })
+        }else{
+            let noMessagesWarn = ['There is no messages!']
+            this.setState({ messages: noMessagesWarn })
+        }
+    }
 
   setSubscriptions = () =>{
     let  authorsWithSubscriptions = [...this.state.authors]
@@ -41,10 +51,7 @@ class SocialText extends Component {
            return;
          })
       })
-      this.setState({
-        authors:authorsWithSubscriptions
-      })
-
+      this.setState({ authors: authorsWithSubscriptions })
     }
   }
 
@@ -63,10 +70,10 @@ class SocialText extends Component {
               userSubscriptions: JSON.parse(userSubscriptions)
           })
         }
-    }) 
+    })
   }
 
-  logOut = () => {    
+  logOut = () => {
     localStorage.setItem('currentUser', '')
     this.setState({
       islogged: false,
@@ -76,12 +83,13 @@ class SocialText extends Component {
     })
     this.getData();
   }
+
   getData = async (currentUser) =>{
     let userLogged = false;
     if (currentUser){
       userLogged= true;
     }
-    const response = await fetch('https://randomuser.me/api/?results=10&seed=abc')
+    const response = await fetch('https://randomuser.me/api/?results=100&seed=abc')
     response.json()
     .then( ({results}) => {
       const authors = [];
@@ -100,9 +108,7 @@ class SocialText extends Component {
         newAuthor.id = login.uuid
         authors.push(newAuthor)
       })
-      this.setState({
-        authors: authors
-      })
+      this.setState({ authors: authors })
     })
   }
 
@@ -115,6 +121,7 @@ class SocialText extends Component {
       localStorage.setItem(`requestsOf:${author.id}`, JSON.stringify(authorRequests))
     }
   }
+
   handleSubscriptions = (user, accepted) => {
     let userSubscription = JSON.parse(localStorage.getItem(`susbcriptionsOf:${user.id}`))
     console.log(userSubscription)
@@ -146,33 +153,43 @@ class SocialText extends Component {
          }
        }
     })
-    this.setState({
-      currentUserRequests: updateUserRequests
-    })
+    this.setState({ currentUserRequests: updateUserRequests })
     localStorage.setItem(`requestsOf:${currentUser.id}`, JSON.stringify(updateUserRequests))
   }
-/*   componentDidUpdate(){
 
-      this.setSubscriptions()
-    
-  } */
+  saveMessage = (message) =>{
+    if(this.state.messages.length === 0){
+      let userMessage = []
+      userMessage.push(message)
+      this.setState({ messages: userMessage })
+      localStorage.setItem(`messagesOf${this.state.currentUser.id}`, JSON.stringify(userMessage))
+    }else{
+      let userMessagesCopy = [...this.state.messages]
+      userMessagesCopy.push(message)
+      this.setState({ message: userMessagesCopy })
+      localStorage.setItem(`messagesOf${this.state.currentUser.id}`, JSON.stringify(userMessagesCopy))
+    }
+  }
+
  componentDidMount() {
         let userLogged = localStorage.getItem('currentUser')
         if (userLogged){
           let currentUserFromLS=JSON.parse(userLogged)
-          let currentUserRequests = localStorage.getItem(`requestsOf:${currentUserFromLS.id}`)
-          let userSubscriptions = localStorage.getItem(`susbcriptionsOf:${currentUserFromLS.id}`)
+          let currentUserRequests = JSON.parse(localStorage.getItem(`requestsOf:${currentUserFromLS.id}`))
+          let userSubscriptions = JSON.parse(localStorage.getItem(`susbcriptionsOf:${currentUserFromLS.id}`))
+          let selectedAuthor = JSON.parse(localStorage.getItem('selectedAuthor'))
+          this.getMessages(selectedAuthor)
           this.getData(currentUserFromLS)
           this.setState({
               currentUser: currentUserFromLS,
-              currentUserRequests: JSON.parse(currentUserRequests),
-              userSubscriptions: JSON.parse(userSubscriptions),
+              currentUserRequests: currentUserRequests,
+              userSubscriptions: userSubscriptions,
+              selectedAuthor: selectedAuthor,
               islogged: true})
         } else {
           this.getData()
         }
   }
-
 
   render() {
     return (
@@ -188,7 +205,7 @@ class SocialText extends Component {
                 </div>
              )}/>
               <Route  exact path="/profile/:idauthor" render={() =>(
-                  <AuthorProfile author={this.state.selectedAuthor} showMessages={this.state.showMessages} sendRequest={this.sendRequest} />
+                  <AuthorProfile author={this.state.selectedAuthor} sendRequest={this.sendRequest} saveMessage={this.saveMessage} messages={this.state.messages}/>
               )}/>
               <Route  exact path="/requests/:idauthor" render={() =>(
                   <Requests currentUserRequests={this.state.currentUserRequests} currentUser={this.state.currentUser} toggleRequest={this.toggleRequest} selectedAuthor={this.selectAuthor}/>
