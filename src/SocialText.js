@@ -11,11 +11,13 @@ import './App.css';
 class SocialText extends Component {
   state = {
     islogged: false,
+    loginError: null,
     authors:[],
     currentUser:{},
     selectedAuthor:{},
     currentUserRequests:null,
-    messages:[]
+    messages:[],
+    error:''
   }
 
   selectAuthor = (id) =>{
@@ -40,7 +42,7 @@ class SocialText extends Component {
             this.setState({ messages: noMessagesWarn })
         }
     }
- 
+
   getAllRequests = () =>{
     console.log('entra en getAllRequests')
     let  authorsCopy = [...this.state.authors]
@@ -61,45 +63,6 @@ class SocialText extends Component {
     this.setState({ authors: authorsCopy })
   }
 
-  logOut = () => {
-    localStorage.setItem('currentUser', '')
-    this.setState({
-      islogged: false,
-      currentUser: null,
-      selectAuthor: null,
-      currentUserRequests: null
-    })
-    this.getData();
-  }
-
-  getData = async (currentUser) =>{
-    let userLogged = false;
-    if (currentUser){
-      userLogged= true;
-    }
-    const response = await fetch('https://randomuser.me/api/?results=100&seed=abc')
-    response.json()
-    .then( ({results}) => {
-      const authors = [];
-      results.forEach(author =>{
-        let newAuthor = {};
-        var {email, picture, name, login} = author;
-
-        if (userLogged && currentUser.id === login.uuid){
-            newAuthor.currentUser = true
-        }
-        newAuthor.email = email
-        newAuthor.picture = picture.medium
-        newAuthor.fullname = fullname(name)
-        newAuthor.username = login.username
-        newAuthor.password = login.password
-        newAuthor.id = login.uuid
-        authors.push(newAuthor)
-      })
-      this.setState({ authors: authors })
-    })
-  }
-
   sendRequest = (author) => {
     let authorRequests = JSON.parse(localStorage.getItem(`requestsOf:${author.id}`))
     if (!authorRequests){
@@ -114,7 +77,7 @@ class SocialText extends Component {
   toggleRequest = (id) =>{
     let currentUser = this.state.currentUser
     let updateUserRequests = [...this.state.currentUserRequests]
-    updateUserRequests.map(request => {
+    updateUserRequests.forEach(request => {
        if (request.user.id ===id){
          if(!request.accepted){
            request.accepted = true
@@ -140,34 +103,85 @@ class SocialText extends Component {
       localStorage.setItem(`messagesOf${this.state.currentUser.id}`, JSON.stringify(userMessagesCopy))
     }
   }
+
+  logOut = () => {
+    localStorage.setItem('currentUser', '')
+    this.setState({
+      islogged: false,
+      loginError:'',
+      currentUser: null,
+      selectAuthor: null,
+      currentUserRequests: null
+    })
+    this.getData();
+  }
+
   checkLogin = (username, password) => {
     this.state.authors.forEach( author => {
-        if (author.username === username && author.password === password){
-            localStorage.setItem('currentUser', JSON.stringify(author))
-            author.currentUser = true;
-            let currentUserRequests = localStorage.getItem(`requestsOf:${author.id}`)
-             this.setState({
+      if (author.username === username && author.password === password){
+          localStorage.setItem('currentUser', JSON.stringify(author))
+          author.currentUser = true;
+          let currentUserRequests = localStorage.getItem(`requestsOf:${author.id}`)
+            this.setState({
               islogged: true,
               currentUser:author,
               currentUserRequests: JSON.parse(currentUserRequests)
-          })
-        }
+            })
+      }
     })
+    if(!this.state.islogged){
+      this.setState({
+        loginError: true
+      })
+    }
   }
+
+  getData = async (currentUser) =>{
+    let userLogged = false;
+    if (currentUser){
+      userLogged= true;
+    }
+    try {
+        const response = await fetch('https://randomuser.me/api/?results=100&seed=abc')
+        response.json()
+        .then( ({results}) => {
+          const authors = [];
+          results.forEach(author =>{
+            let newAuthor = {};
+            var {email, picture, name, login} = author;
+
+            if (userLogged && currentUser.id === login.uuid){
+                newAuthor.currentUser = true
+            }
+            newAuthor.email = email
+            newAuthor.picture = picture.medium
+            newAuthor.fullname = fullname(name)
+            newAuthor.username = login.username
+            newAuthor.password = login.password
+            newAuthor.id = login.uuid
+            authors.push(newAuthor)
+          })
+          this.setState({ authors: authors })
+        })
+      }catch(err){
+        this.setState({
+          error: 'Error al cargar la lista de usuarios'
+        })
+        console.log(err.message, 'error al cargar la lista de usuarios')
+      }
+  }
+
   componentDidMount() {
-    console.log('render')
         let userLogged = localStorage.getItem('currentUser')
         if (userLogged){
           let currentUserFromLS=JSON.parse(userLogged)
           let currentUserRequests = JSON.parse(localStorage.getItem(`requestsOf:${currentUserFromLS.id}`))
-          /* let userSubscriptions = JSON.parse(localStorage.getItem(`susbcriptionsOf:${currentUserFromLS.id}`)) */
           let selectedAuthor = JSON.parse(localStorage.getItem('selectedAuthor'))
           this.getMessages(selectedAuthor)
           this.getData(currentUserFromLS)
           this.setState({
               currentUser: currentUserFromLS,
               currentUserRequests: currentUserRequests,
-              /* userSubscriptions: userSubscriptions, */
               selectedAuthor: selectedAuthor,
               islogged: true})
         } else {
@@ -179,23 +193,33 @@ class SocialText extends Component {
     return (
     <BrowserRouter>
       <React.Fragment>
-        <Header checklogin={this.checkLogin} islogged={this.state.islogged} logOut={this.logOut} currentUser={this.state.currentUser}/>
-          {this.state.islogged &&
-          <Switch>
+        <Header checklogin={this.checkLogin} islogged={this.state.islogged} loginError={this.state.loginError} logOut={this.logOut} currentUser={this.state.currentUser}/>
+          {
+              this.state.error &&
+              <span style={{color: 'red'}}>
+                  { this.state.error }
+              </span>
+          }
+
+          {
+            this.state.islogged &&
+            <Switch>
               <Route  exact path="/" render={() => (
                 <div>
                   <Navigation currentUser={this.state.currentUser} selectedAuthor={this.selectAuthor}/>
                   <Authors authors={this.state.authors} selectedAuthor={this.selectAuthor} currentUser={this.state.currentUser} />
                 </div>
-             )}/>
+              )}/>
+
               <Route  exact path="/profile/:idauthor" render={() =>(
                   <AuthorProfile author={this.state.selectedAuthor} sendRequest={this.sendRequest} saveMessage={this.saveMessage} messages={this.state.messages}/>
               )}/>
+
               <Route  exact path="/requests/:idauthor" render={() =>(
                   <Requests currentUserRequests={this.state.currentUserRequests} currentUser={this.state.currentUser} toggleRequest={this.toggleRequest} selectedAuthor={this.selectAuthor}/>
               )}/>
-          </Switch>
-           }
+            </Switch>
+          }
       </React.Fragment>
     </BrowserRouter>
     )

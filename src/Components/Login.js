@@ -3,45 +3,52 @@ import { Link } from 'react-router-dom';
 
 class Login extends React.Component {
     state = {
-        loginData: {login: '', passwd:''},
-      }
-      submit = (event) => {
+        login:'',
+        password:''
+    }
+
+    submit = (event) => {
         event.preventDefault()
-        const {login, passwd} = this.state.loginData
-        this.props.checklogin(login, passwd)
-      }
-      changeState = (field) => (event) => this.setState({
-        loginData: {
-          ...this.state.loginData,
-          [field]: event.target.value
-        }
-      })
+        const {login, password} = this.state
+        this.props.checklogin(login, password)
+    }
+
+    changeState = (field) => (event) => this.setState({
+        [field]: event.target.value
+    })
+
     render(){
-        const {islogged, currentUser}= this.props
+        const {islogged, currentUser, loginError}= this.props
         return (
-            <div>
-                {
-                    islogged ?
-                    <p>Hola{currentUser.fullname}
-                    <Link to="/"><span onClick={this.props.logOut}>Log out</span></Link>
-                    </p>  :
+         <div>
+            {
+                islogged ?
+                <p>Hola&nbsp;{currentUser.fullname}
+                <Link to="/"><span onClick={this.props.logOut}>Log out</span></Link>
+                </p>  :
+
                 <form onSubmit={this.submit}>
                     <div>
-                        <label>Login&nbsp;<input type= "text" value={this.state.loginData.login} onChange={this.changeState('login')} autoComplete="username"/></label>
+                        <label>Login&nbsp;<input type= "text" value={this.state.login} onChange={(e) => this.changeState('login')(e)} autoComplete="username"/></label>
                     </div>
                     <div>
-                        <label>Password&nbsp;
-                        <input type="password" value={this.state.loginData.passwd} onChange={this.changeState('passwd')} autoComplete="current-password"/>
-                        </label>
+                        <label>Password&nbsp;<input type="password" value={this.state.password} onChange={(e) => this.changeState('password')(e)} autoComplete="current-password"/></label>
+
                     </div>
+                    {
+                        loginError &&
+                        <span style={{color: 'red'}}>
+                        { 'Usuario o contraseña incorrectas'  }
+                        </span>
+                    }
                     <div>
-                         <input type="submit" value="Login" />
+                        <input type="submit" value="Login" />
                     </div>
                 </form>
-                }
-            </div>
+            }
+         </div>
         )
-    }
+}
 }
 
 export default Login;
