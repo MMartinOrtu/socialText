@@ -24,6 +24,7 @@ const AuthorProfile = ({author, sendRequest, saveMessage, messages}) =>
                     }
                 </ul>
             </div>:
+            !author.requestNotAnswerd  &&
         <button onClick={() => sendRequest(author)}>Follow</button>
     }
 

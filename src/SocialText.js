@@ -15,19 +15,20 @@ class SocialText extends Component {
     currentUser:{},
     selectedAuthor:{},
     currentUserRequests:null,
-    userSubscriptions:null,
     messages:[]
   }
 
   selectAuthor = (id) =>{
+    this.getAllRequests();
+    console.log('entra en select')
     this.state.authors.forEach( author => {
       if(author.id === id){
+        console.log('entra en el selected author')
         this.setState({ selectedAuthor: author })
         localStorage.setItem('selectedAuthor', JSON.stringify(author))
         this.getMessages(author)
       }
     })
-    this.setSubscriptions()
   }
 
   getMessages = (author) => {
@@ -39,38 +40,25 @@ class SocialText extends Component {
             this.setState({ messages: noMessagesWarn })
         }
     }
-
-  setSubscriptions = () =>{
-    let  authorsWithSubscriptions = [...this.state.authors]
-    if(this.state.userSubscriptions){
-      this.state.userSubscriptions.forEach( subcription =>{
-         authorsWithSubscriptions.forEach( author =>{
-           if(author.id === subcription.id){
-             author.showMessages = true
-           }
-           return;
-         })
-      })
-      this.setState({ authors: authorsWithSubscriptions })
-    }
-  }
-
-  checkLogin = (username, password) => {
-    this.state.authors.forEach( author => {
-        if (author.username === username && author.password === password){
-            let usertoDB = JSON.stringify(author)
-            localStorage.setItem('currentUser', usertoDB)
-            author.currentUser = true;
-            let currentUserRequests = localStorage.getItem(`requestsOf:${author.id}`)
-            let userSubscriptions = localStorage.getItem(`susbcriptionsOf:${author.id}`)
-            this.setState({
-              islogged: true,
-              currentUser:author,
-              currentUserRequests: JSON.parse(currentUserRequests),
-              userSubscriptions: JSON.parse(userSubscriptions)
-          })
-        }
-    })
+ 
+  getAllRequests = () =>{
+    console.log('entra en getAllRequests')
+    let  authorsCopy = [...this.state.authors]
+    authorsCopy.forEach((author => {
+      let requests = JSON.parse(localStorage.getItem(`requestsOf:${author.id}`))
+      if (requests){
+        console.log('entra')
+        requests.forEach( request =>{
+             console.log('id del reques', request.user.id)
+              console.log('id del author', author.id)
+          if (this.state.currentUser.id === request.user.id ){
+            console.log('entra en el if getAllRequests')
+             request.accepted ? author.showMessages = true : author.requestNotAnswerd = true
+          }
+        })
+      }
+    }))
+    this.setState({ authors: authorsCopy })
   }
 
   logOut = () => {
@@ -120,36 +108,18 @@ class SocialText extends Component {
       authorRequests.push({user: this.state.currentUser, accepted: false})
       localStorage.setItem(`requestsOf:${author.id}`, JSON.stringify(authorRequests))
     }
-  }
-
-  handleSubscriptions = (user, accepted) => {
-    let userSubscription = JSON.parse(localStorage.getItem(`susbcriptionsOf:${user.id}`))
-    console.log(userSubscription)
-    if (!userSubscription){
-       localStorage.setItem(`susbcriptionsOf:${user.id}`, JSON.stringify([this.state.currentUser]))
-    }else{
-      if(accepted){
-        userSubscription.push(this.state.currentUser)
-        console.log('dentro', userSubscription)
-        localStorage.setItem(`susbcriptionsOf:${user.id}`, JSON.stringify(userSubscription))
-      }else{
-        let newUserSubscription = userSubscription.filter(user => user.id !== this.state.currentUser.id)
-        localStorage.setItem(`susbcriptionsOf:${user.id}`, JSON.stringify(newUserSubscription))
-      }
-    }
+    this.getAllRequests();
   }
 
   toggleRequest = (id) =>{
     let currentUser = this.state.currentUser
-    let updateUserRequests = this.state.currentUserRequests
+    let updateUserRequests = [...this.state.currentUserRequests]
     updateUserRequests.map(request => {
        if (request.user.id ===id){
          if(!request.accepted){
            request.accepted = true
-           this.handleSubscriptions(request.user, request.accepted)
          }else{
            request.accepted = false
-           this.handleSubscriptions(request.user, request.accepted)
          }
        }
     })
@@ -170,20 +140,34 @@ class SocialText extends Component {
       localStorage.setItem(`messagesOf${this.state.currentUser.id}`, JSON.stringify(userMessagesCopy))
     }
   }
-
- componentDidMount() {
+  checkLogin = (username, password) => {
+    this.state.authors.forEach( author => {
+        if (author.username === username && author.password === password){
+            localStorage.setItem('currentUser', JSON.stringify(author))
+            author.currentUser = true;
+            let currentUserRequests = localStorage.getItem(`requestsOf:${author.id}`)
+             this.setState({
+              islogged: true,
+              currentUser:author,
+              currentUserRequests: JSON.parse(currentUserRequests)
+          })
+        }
+    })
+  }
+  componentDidMount() {
+    console.log('render')
         let userLogged = localStorage.getItem('currentUser')
         if (userLogged){
           let currentUserFromLS=JSON.parse(userLogged)
           let currentUserRequests = JSON.parse(localStorage.getItem(`requestsOf:${currentUserFromLS.id}`))
-          let userSubscriptions = JSON.parse(localStorage.getItem(`susbcriptionsOf:${currentUserFromLS.id}`))
+          /* let userSubscriptions = JSON.parse(localStorage.getItem(`susbcriptionsOf:${currentUserFromLS.id}`)) */
           let selectedAuthor = JSON.parse(localStorage.getItem('selectedAuthor'))
           this.getMessages(selectedAuthor)
           this.getData(currentUserFromLS)
           this.setState({
               currentUser: currentUserFromLS,
               currentUserRequests: currentUserRequests,
-              userSubscriptions: userSubscriptions,
+              /* userSubscriptions: userSubscriptions, */
               selectedAuthor: selectedAuthor,
               islogged: true})
         } else {
