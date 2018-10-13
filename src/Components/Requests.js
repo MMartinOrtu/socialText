@@ -15,8 +15,8 @@ const Requests = ({currentUserRequests, toggleRequest, selectedAuthor}) =>
               </div>
           </div>:
           <div key={user.id}>
-             <p>{user.fullname} puede ver tus mesnsajes a partir de ahora</p>
-             <p>Si quieres deshanilitarlo de  nuevo haz click aquí</p>
+             <p>{user.fullname} puede ver tus mensajes a partir de ahora</p>
+             <p>Si quieres deshabilitarlo de  nuevo haz click aquí</p>
              <button  key={user.id} onClick={() => toggleRequest(user.id)}>Cancelar subscripción</button> 
           </div>
         )

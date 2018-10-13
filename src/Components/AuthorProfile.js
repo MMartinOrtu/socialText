@@ -18,23 +18,22 @@ const AuthorProfile = ({author, sendRequest, saveMessage, messages}) =>
                 <h2>List of messages</h2>
                 <ul>
                     {
+                    messages ?
                     messages.map(message =>(
                       <p>{message}</p>
-                    ))
+                    )) :
+                    <p>there is no messages</p>
                     }
                 </ul>
             </div>:
             <div>
                  {
-                 author.requestNotAnswerd  ?
+                 author.requestNotAnswered  ?
                  <p>Subscripción pendiente de aprobar</p> :
                  <button onClick={() => sendRequest(author)}>Follow</button>
                 }
             </div>
-  
     }
-
 </div>
-
 
 export default AuthorProfile;
