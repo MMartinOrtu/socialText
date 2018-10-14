@@ -6,7 +6,7 @@ const Author = ({author, selectedAuthor}) =>
   <div className="author">
    <Link className="author-link" to={`/profile/${author.id}`} onClick={() =>selectedAuthor(author.id)}>
     <img className="author-img"src={author.picture} alt={author.fullname} title={author.fullname}/>
-    </Link>
+  </Link>
   </div>
 
 export default Author;

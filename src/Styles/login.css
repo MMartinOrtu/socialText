@@ -1,5 +1,6 @@
 .login{
     font-size: 1.5rem;
+    color:rgb(163, 88, 45);;
 }
 
 .login-form{
@@ -7,13 +8,13 @@
     height: 100%;
     flex-wrap: wrap;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: flex-end;
 }
 
 .login-item{
     margin: 4px;
-    color: white;
+    color: #1761a0;
 }
 .input-item{
     width: 200px;
@@ -29,16 +30,10 @@
     font-size: 1rem;
     border: 0px solid;
     border-radius:5px;
-}
-
-.error{
-    display: inline-block;
-    color: rgb(102, 8, 8);
-    margin:0;
-    padding:0;
+    color: #1761a0;
 }
 
 .logout{
     text-decoration: none;
-    color:rgb(201, 151, 122);
+    color:#1761a0;
 }

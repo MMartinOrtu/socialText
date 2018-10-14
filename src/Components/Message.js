@@ -23,9 +23,9 @@ class Message extends React.Component {
   render(){
     return(
       <React.Fragment>
-        <h2 className="profile-messages-title">Write a new message:</h2>
+        <h2 className="profile-messages-title">Escriba un mensaje:</h2>
         <textarea className="message" value={this.state.message} onChange={this.changeState}></textarea>
-        <button className="profile-btn" onClick={() => this.sendMessage(this.state.message)}>Save</button>
+        <button className="profile-btn" onClick={() => this.sendMessage(this.state.message)}>Guardar</button>
       </React.Fragment>
     )
   }

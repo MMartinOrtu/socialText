@@ -1,6 +1,5 @@
 .profile {
-    background: rgb(3, 151, 139);
-    color:white;
+    color: #1761a0;
     text-align: center;
     margin: 0 auto;
     font-size: 1.5rem;
@@ -13,7 +12,7 @@
 }
 .profile-title {
     font-size: 2.5rem;
-    color: rgb(163, 88, 45);
+    color: #1761a0;
 }
 .profile-title span{
     text-transform: capitalize;
@@ -29,10 +28,11 @@
 }
 
 .profile-btn{
-    padding: 5px;
-    margin: 5px;
+    padding: 10px;
+    margin: 5px 20px;
+    font-size: 1rem;
+    background-color: rgba(128, 128, 128, 0.329);
     width: 150px;
-    font-size: 1.5rem;
     font-weight: bold;
     border: 0px solid;
     border-radius:5px;

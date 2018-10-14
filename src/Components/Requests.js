@@ -3,12 +3,12 @@ import Author from './Author';
 import Navigation from './Navigation';
 import '../Styles/request.css';
 
-const Requests = ({currentUserRequests, toggleRequest, selectedAuthor}) =>
+const Requests = ({currentUserRequests, currentUser, toggleRequest, selectedAuthor}) =>
   <div className="requests">
-       <Navigation currentUser={selectedAuthor} selectedAuthor={selectedAuthor}/>
-      <h3 className="request-title">List of requests</h3>
+       <Navigation currentUser={currentUser} selectedAuthor={selectedAuthor}/>
+      <h3 className="request-title">Listado de solicitudes</h3>
       {   !currentUserRequests ?
-        <p>No tiene requests</p>:
+        <p>No tiene ninguna solicitud de subscripción</p>:
         currentUserRequests.map( ({user, accepted})=>
           !accepted ?
           <div className="request-wrapper" key={`request-wrapper${user.id}`}>

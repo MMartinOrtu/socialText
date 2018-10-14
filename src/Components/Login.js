@@ -30,10 +30,10 @@ class Login extends React.Component {
 
                 <form className="login-form" onSubmit={this.submit}>
                     <div className="login-item">
-                        <label>Login:&nbsp;<input className="input-item" type= "text" value={this.state.login} onChange={(e) => this.changeState('login')(e)} autoComplete="username"/></label>
+                        <label>Ussuario:&nbsp;<input className="input-item" type= "text" value={this.state.login} onChange={(e) => this.changeState('login')(e)} autoComplete="username"/></label>
                     </div>
                     <div className="login-item">
-                        <label>Password:&nbsp;<input className="input-item" type="password" value={this.state.password} onChange={(e) => this.changeState('password')(e)} autoComplete="current-password"/></label>
+                        <label>Contraseña:&nbsp;<input className="input-item" type="password" value={this.state.password} onChange={(e) => this.changeState('password')(e)} autoComplete="current-password"/></label>
 
                     </div>
                     <div className="login-item">

@@ -163,7 +163,7 @@ class SocialText extends Component {
         })
       }catch(err){
         this.setState({
-          error: 'Error al cargar la lista de usuarios'
+          error: '¡Error al cargar la lista de usuarios!'
         })
         console.log(err.message, 'error al cargar la lista de usuarios')
       }
@@ -197,7 +197,7 @@ class SocialText extends Component {
         <Header checklogin={this.checkLogin} islogged={this.state.islogged} loginError={this.state.loginError} logOut={this.logOut} currentUser={this.state.currentUser}/>
           {
               this.state.error &&
-              <span className="conection-error">{ this.state.error }</span>
+              <span className="error">{ this.state.error }</span>
           }
           {
             this.state.islogged ?

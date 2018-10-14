@@ -23,14 +23,14 @@ const AuthorProfile = ({author, currentUser, sendRequest, saveMessage, messages,
                 {
                     author.showMessages || author.currentUser ?
                     <div>
-                        <h2 className="profile-messages-title">List of messages</h2>
+                        <h2 className="profile-messages-title">Listado de mensajes</h2>
                         <div>
                             {
                             messages ?
                                 messages.map(message =>(
                                 <p className="message-displayed" key={messages.indexOf(message)}>{message}</p>
                                 )):
-                            <p>there is no messages</p>
+                            <p>Este author aún no ha escrito ningún mensaje</p>
                             }
                         </div>
                     </div>:
