@@ -56,6 +56,12 @@ To set the application for production using Webpack:
 npm run build
 ```
 
+## Deployment
+
+This app has been deploy in Surge. If you want to test it in a production environmet go to the folloring URL:
+
+http://socialtext.surge.sh/
+
 ## Views
 ### Main
 <p align=center><img src="./src/Images/Foto-readme.jpg"></p>

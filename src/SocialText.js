@@ -176,7 +176,9 @@ class SocialText extends Component {
           let currentUserFromLS=JSON.parse(userLogged)
           let currentUserRequests = JSON.parse(localStorage.getItem(`requestsOf:${currentUserFromLS.id}`))
           let selectedAuthor = JSON.parse(localStorage.getItem('selectedAuthor'))
-          this.getMessages(selectedAuthor)
+          if(selectedAuthor){
+            this.getMessages(selectedAuthor)
+          }
           this.getData(currentUserFromLS)
           this.setState({
               currentUser: currentUserFromLS,
