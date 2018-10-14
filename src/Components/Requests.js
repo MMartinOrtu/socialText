@@ -1,8 +1,10 @@
 import React from 'react';
 import Author from './Author';
+import Navigation from './Navigation';
 
 const Requests = ({currentUserRequests, toggleRequest, selectedAuthor}) =>
   <div >
+       <Navigation currentUser={selectedAuthor} selectedAuthor={selectedAuthor}/>
       <h3>List of requests</h3>
       {   !currentUserRequests ?
         <p>No tiene requests</p>:

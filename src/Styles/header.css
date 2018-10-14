@@ -1,0 +1,34 @@
+.header{
+    padding: .5rem;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgb(3, 151, 139);
+    justify-content: center;
+    align-items: center;
+    color:rgb(236, 224, 200);
+}
+@media screen and (min-width: 955px){
+    .header{
+        justify-content: space-between;
+        padding: 1rem 1rem;
+    }
+/*     .header-logo{
+        margin-left: 0 10px;
+    } */
+
+}
+
+.header-logo{
+    width: 100px;
+    height: 100px;
+    margin-left: 10px;
+}
+
+h1{
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    text-align: center;
+    margin:0 10px;
+    padding:0;
+    font-size: 5rem;
+}
+

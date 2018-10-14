@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Header from './Components/Header';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Header from './Components/Header';
 import Authors from './Components/Authors';
 import AuthorProfile from './Components/AuthorProfile';
 import Requests from './Components/Requests';
 import Navigation from './Components/Navigation';
-
-import './App.css';
+import './Styles/styles.css';
+import fondo from './fondo.jpg';
 
 class SocialText extends Component {
   state = {
@@ -196,12 +196,10 @@ class SocialText extends Component {
         <Header checklogin={this.checkLogin} islogged={this.state.islogged} loginError={this.state.loginError} logOut={this.logOut} currentUser={this.state.currentUser}/>
           {
               this.state.error &&
-              <span style={{color: 'red'}}>
-                  { this.state.error }
-              </span>
+              <span className="conection-error">{ this.state.error }</span>
           }
           {
-            this.state.islogged &&
+            this.state.islogged ?
             <Switch>
               <Route  exact path="/" render={() => (
                 <div>
@@ -217,7 +215,9 @@ class SocialText extends Component {
               <Route  exact path="/requests/:idauthor" render={() =>(
                   <Requests currentUserRequests={this.state.currentUserRequests} currentUser={this.state.currentUser} toggleRequest={this.toggleRequest} selectedAuthor={this.selectAuthor}/>
               )}/>
-            </Switch>
+            </Switch> :
+            <img src={fondo} alt={'Imagen de portada'}/>
+
           }
       </React.Fragment>
     </BrowserRouter>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../Styles/login.css';
 
 class Login extends React.Component {
     state = {
@@ -20,30 +21,29 @@ class Login extends React.Component {
     render(){
         const {islogged, currentUser, loginError}= this.props
         return (
-         <div>
+         <div className="login">
             {
                 islogged ?
-                <p>Hola&nbsp;{currentUser.fullname}
+                <p className="logged-message">¡Hola&nbsp;&nbsp;{currentUser.fullname}!&nbsp;&nbsp;
                 <Link to="/"><span onClick={this.props.logOut}>Log out</span></Link>
                 </p>  :
 
-                <form onSubmit={this.submit}>
-                    <div>
-                        <label>Login&nbsp;<input type= "text" value={this.state.login} onChange={(e) => this.changeState('login')(e)} autoComplete="username"/></label>
+                <form className="login-form" onSubmit={this.submit}>
+                    <div className="login-item">
+                        <label>Login:&nbsp;<input className="input-item" type= "text" value={this.state.login} onChange={(e) => this.changeState('login')(e)} autoComplete="username"/></label>
                     </div>
-                    <div>
-                        <label>Password&nbsp;<input type="password" value={this.state.password} onChange={(e) => this.changeState('password')(e)} autoComplete="current-password"/></label>
+                    <div className="login-item">
+                        <label>Password:&nbsp;<input className="input-item" type="password" value={this.state.password} onChange={(e) => this.changeState('password')(e)} autoComplete="current-password"/></label>
 
                     </div>
+                    <div className="login-item">
                     {
                         loginError &&
-                        <span style={{color: 'red'}}>
-                        { 'Usuario o contraseña incorrectas'  }
-                        </span>
+                        <p className="error">Usuario o contraseña incorrectos</p>
                     }
-                    <div>
-                        <input type="submit" value="Login" />
+                        <input className="button-item" type="submit" value="Login" />
                     </div>
+
                 </form>
             }
          </div>

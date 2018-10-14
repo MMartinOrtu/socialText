@@ -1,16 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Login from './Login';
-import logo from '../socialtext.png';
-import '../Header.css'
-
+import logo from '../socialtext-white.png';
+import '../Styles/header.css';
 
 const Header = (props) =>
-    <div className="header-wrapper">
+    <React.Fragment>
         <header className="header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">Welcome to Social Text</h1>
+            <Link to={"/"}><img src={logo} className="header-logo" alt="Social Text logo" /></Link>
+            <h1>Conectando personas</h1>
             <Login checklogin={props.checklogin} islogged={props.islogged} loginError={props.loginError} logOut={props.logOut} currentUser={props.currentUser} />
         </header>
-    </div>
+    </React.Fragment>
 
  export default Header;
