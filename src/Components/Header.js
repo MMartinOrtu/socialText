@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Login from './Login';
-import logo from '../socialtext-white.png';
+import logo from '../Images/socialtext-white.png';
 import '../Styles/header.css';
 
 const Header = (props) =>

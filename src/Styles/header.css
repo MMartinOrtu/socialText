@@ -12,10 +12,6 @@
         justify-content: space-between;
         padding: 1rem 1rem;
     }
-/*     .header-logo{
-        margin-left: 0 10px;
-    } */
-
 }
 
 .header-logo{
@@ -30,5 +26,6 @@ h1{
     margin:0 10px;
     padding:0;
     font-size: 5rem;
+    color:rgb(163, 88, 45);
 }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import '../Styles/message.css';
 
 class Message extends React.Component {
   state = {
@@ -21,11 +22,11 @@ class Message extends React.Component {
 
   render(){
     return(
-        <div>
-          <h2>Write a new message</h2>
-          <textarea value={this.state.message} onChange={this.changeState}></textarea>
-          <button onClick={() => this.sendMessage(this.state.message)}>Save</button>
-        </div>
+      <React.Fragment>
+        <h2 className="profile-messages-title">Write a new message:</h2>
+        <textarea className="message" value={this.state.message} onChange={this.changeState}></textarea>
+        <button className="profile-btn" onClick={() => this.sendMessage(this.state.message)}>Save</button>
+      </React.Fragment>
     )
   }
 }

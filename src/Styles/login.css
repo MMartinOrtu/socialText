@@ -37,3 +37,8 @@
     margin:0;
     padding:0;
 }
+
+.logout{
+    text-decoration: none;
+    color:rgb(201, 151, 122);
+}

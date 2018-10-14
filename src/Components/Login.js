@@ -25,7 +25,7 @@ class Login extends React.Component {
             {
                 islogged ?
                 <p className="logged-message">¡Hola&nbsp;&nbsp;{currentUser.fullname}!&nbsp;&nbsp;
-                <Link to="/"><span onClick={this.props.logOut}>Log out</span></Link>
+                <Link className="logout" to="/"><span  onClick={this.props.logOut}>Log out</span></Link>
                 </p>  :
 
                 <form className="login-form" onSubmit={this.submit}>

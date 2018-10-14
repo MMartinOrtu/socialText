@@ -5,8 +5,7 @@ import Authors from './Components/Authors';
 import AuthorProfile from './Components/AuthorProfile';
 import Requests from './Components/Requests';
 import Navigation from './Components/Navigation';
-import './Styles/styles.css';
-import fondo from './fondo.jpg';
+import fondo from './Images/fondo.jpg';
 
 class SocialText extends Component {
   state = {
@@ -17,7 +16,7 @@ class SocialText extends Component {
     selectedAuthor:{},
     currentUserRequests: null,
     messages: null,
-    error:''
+    error:null
   }
 
   // This method select an author when the current user click on the "See profile" button,
@@ -209,7 +208,7 @@ class SocialText extends Component {
               )}/>
 
               <Route  exact path="/profile/:idauthor" render={() =>(
-                  <AuthorProfile author={this.state.selectedAuthor} sendRequest={this.sendRequest} saveMessage={this.saveMessage} messages={this.state.messages}/>
+                  <AuthorProfile author={this.state.selectedAuthor} sendRequest={this.sendRequest} saveMessage={this.saveMessage} messages={this.state.messages} currentUser={this.state.currentUser} selectedAuthor={this.selectAuthor}/>
               )}/>
 
               <Route  exact path="/requests/:idauthor" render={() =>(
