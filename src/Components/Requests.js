@@ -1,11 +1,9 @@
 import React from 'react';
 import Author from './Author';
-import Navigation from './Navigation';
 import '../Styles/request.css';
 
-const Requests = ({currentUserRequests, currentUser, toggleRequest, selectedAuthor}) =>
+const Requests = ({currentUserRequests, toggleRequest, selectedAuthor}) =>
   <div className="requests">
-       <Navigation currentUser={currentUser} selectedAuthor={selectedAuthor}/>
       <h3 className="request-title">Listado de solicitudes</h3>
       {   !currentUserRequests ?
         <p>No tiene ninguna solicitud de subscripción</p>:

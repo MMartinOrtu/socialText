@@ -1,11 +1,9 @@
 import React from 'react';
 import Message from './Message';
-import Navigation from './Navigation';
 import '../Styles/profile.css'
 
-const AuthorProfile = ({author, currentUser, sendRequest, saveMessage, messages, selectedAuthor}) =>
+const AuthorProfile = ({author, sendRequest, saveMessage, messages}) =>
     <React.Fragment>
-        <Navigation currentUser={currentUser} selectedAuthor={selectedAuthor}/>
         <div className="profile">
             <div className="profile-data">
                 <h2 className="profile-title">Perfil de <span>{author.fullname}</span></h2>

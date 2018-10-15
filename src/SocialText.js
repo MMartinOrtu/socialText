@@ -201,22 +201,22 @@ class SocialText extends Component {
           }
           {
             this.state.islogged ?
-            <Switch>
-              <Route  exact path="/" render={() => (
-                <div>
-                  <Navigation currentUser={this.state.currentUser} selectedAuthor={this.selectAuthor}/>
-                  <Authors authors={this.state.authors} selectedAuthor={this.selectAuthor} currentUser={this.state.currentUser} />
-                </div>
-              )}/>
+            <React.Fragment>
+            <Navigation currentUser={this.state.currentUser} selectedAuthor={this.selectAuthor}/>
+              <Switch>
+                <Route  exact path="/" render={() => (
+                    <Authors authors={this.state.authors} selectedAuthor={this.selectAuthor} currentUser={this.state.currentUser} />
+                )}/>
 
-              <Route  exact path="/profile/:idauthor" render={() =>(
-                  <AuthorProfile author={this.state.selectedAuthor} sendRequest={this.sendRequest} saveMessage={this.saveMessage} messages={this.state.messages} currentUser={this.state.currentUser} selectedAuthor={this.selectAuthor}/>
-              )}/>
+                <Route  exact path="/profile/:idauthor" render={() =>(
+                    <AuthorProfile author={this.state.selectedAuthor} sendRequest={this.sendRequest} saveMessage={this.saveMessage} messages={this.state.messages} currentUser={this.state.currentUser} selectedAuthor={this.selectAuthor}/>
+                )}/>
 
-              <Route  exact path="/requests/:idauthor" render={() =>(
-                  <Requests currentUserRequests={this.state.currentUserRequests} currentUser={this.state.currentUser} toggleRequest={this.toggleRequest} selectedAuthor={this.selectAuthor}/>
-              )}/>
-            </Switch> :
+                <Route  exact path="/requests/:idauthor" render={() =>(
+                    <Requests currentUserRequests={this.state.currentUserRequests} toggleRequest={this.toggleRequest} selectedAuthor={this.selectAuthor}/>
+                )}/>
+              </Switch>
+            </React.Fragment> :
             <img src={fondo} alt={'Imagen de portada'}/>
 
           }
