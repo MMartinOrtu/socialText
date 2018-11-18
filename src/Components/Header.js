@@ -9,7 +9,7 @@ const Header = (props) =>
         <header className="header">
             <Link to={"/"}><img src={logo} className="header-logo" alt="Social Text logo" /></Link>
             <h1>TU RED SOCIAL DE MENSAJES</h1>
-            <Login checklogin={props.checklogin} islogged={props.islogged} loginError={props.loginError} logOut={props.logOut} currentUser={props.currentUser} />
+            <Login />
         </header>
     </React.Fragment>
 

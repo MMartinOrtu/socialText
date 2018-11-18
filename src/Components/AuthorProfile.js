@@ -1,32 +1,34 @@
 import React from 'react';
 import Message from './Message';
+import {connect} from 'react-redux';
+import {sendRequest} from '../index.js'
 import '../Styles/profile.css'
 
-const AuthorProfile = ({author, sendRequest, saveMessage, messages}) =>
+const AuthorProfileView = ({authorSelected, authorLogged, sendRequest}) =>
     <React.Fragment>
         <div className="profile">
             <div className="profile-data">
-                <h2 className="profile-title">Perfil de <span>{author.fullname}</span></h2>
-                <img src={author.picture} alt={author.fullname}/>
-                <p>{author.email}</p>
+                <h2 className="profile-title">Perfil de <span>{authorSelected.author.fullname}</span></h2>
+                <img src={authorSelected.author.picture} alt={authorSelected.author.fullname}/>
+                <p>{authorSelected.author.email}</p>
             </div>
             <div className="profile-messages">
                 <div className="message-area">
                 <h2 className="profile-title">Área de mensajes</h2>
                 {
-                    author.currentUser &&
-                    <Message saveMessage={saveMessage} />
+                    authorSelected.author.id === authorLogged.author.id &&
+                    <Message />
                 }
                 </div>
                 {
-                    author.showMessages || author.currentUser ?
+                    authorSelected.author.requestState || authorSelected.author.id === authorLogged.author.id ?
                     <div>
                         <h2 className="profile-messages-title">Listado de mensajes</h2>
                         <div>
                             {
-                            messages ?
-                                messages.map(message =>(
-                                <p className="message-displayed" key={messages.indexOf(message)}>{message}</p>
+                            authorSelected.messages ?
+                            authorSelected.messages.map(message =>(
+                                <p className="message-displayed" key={authorSelected.messages.indexOf(message)}>{message}</p>
                                 )):
                             <p>Este author aún no ha escrito ningún mensaje</p>
                             }
@@ -34,11 +36,11 @@ const AuthorProfile = ({author, sendRequest, saveMessage, messages}) =>
                     </div>:
                     <div>
                         {
-                        author.requestNotAnswered  ?
+                        authorSelected.author.requestState === false ?
                         <p>Subscripción pendiente de aprobar</p> :
                         <React.Fragment>
                             <p>Si quiere leer los mensajes de este autor envíele una solicitud de subscripción</p>
-                            <button className="profile-btn" onClick={() => sendRequest(author)}>Enviar socilitud</button>
+                            <button className="profile-btn" onClick={() => sendRequest(authorSelected.author)}>Enviar socilitud</button>
                         </React.Fragment>
                         }
                     </div>
@@ -46,4 +48,11 @@ const AuthorProfile = ({author, sendRequest, saveMessage, messages}) =>
             </div>
         </div>
     </React.Fragment>
+
+const AuthorProfile = connect( state => ({
+    authorSelected: state.authorSelected,
+    authorLogged: state.authorLogged
+  }), dispatch => ({
+    sendRequest: (author) => dispatch(sendRequest(author))
+  }))(AuthorProfileView)
 export default AuthorProfile;

@@ -1,16 +1,17 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import {saveMessage} from '../index.js'
 import '../Styles/message.css';
 
-class Message extends React.Component {
+class MessageView extends React.Component {
   state = {
-      message:null,
+      message:'',
       error:null
     }
 
   sendMessage = () => {
     if(this.state.message){
-      let author = this.props.author
-      this.props.saveMessage(this.state.message, author)
+      this.props.saveMessage(this.state.message)
       this.setState({
         message:'',
         error: null
@@ -37,10 +38,15 @@ class Message extends React.Component {
           this.state.error &&
           <p>{this.state.error}</p>
         }
-        <button className="profile-btn" onClick={() => this.sendMessage(this.state.message)}>Guardar</button>
+        <button className="profile-btn" onClick={() => this.sendMessage()}>Guardar</button>
      </React.Fragment>
     )
   }
 }
+const Message = connect( state => ({
+  userLogged: state.userLogged
+}), dispatch => ({
+  saveMessage: (message) => dispatch(saveMessage(message))
+}))(MessageView)
 
 export default Message;

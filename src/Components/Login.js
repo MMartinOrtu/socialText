@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../Styles/login.css';
+import {connect} from 'react-redux';
+import {checkLogin, logOut} from '../index.js'
 
-class Login extends React.Component {
+class LoginView extends React.Component {
     state = {
         login:'',
         password:''
@@ -11,7 +13,7 @@ class Login extends React.Component {
     submit = (event) => {
         event.preventDefault()
         const {login, password} = this.state
-        this.props.checklogin(login, password)
+        this.props.logUser(login, password)
     }
 
     changeState = (field) => (event) => this.setState({
@@ -19,12 +21,12 @@ class Login extends React.Component {
     })
 
     render(){
-        const {islogged, currentUser, loginError}= this.props
+        const {author, loginError}= this.props.authorLogged
         return (
          <div className="login">
             {
-                islogged ?
-                <p className="logged-message">¡Hola&nbsp;&nbsp;{currentUser.fullname}!&nbsp;&nbsp;
+                author ?
+                <p className="logged-message">¡Hola&nbsp;&nbsp;{author.fullname}!&nbsp;&nbsp;
                 <Link className="logout" to="/"><span  onClick={this.props.logOut}>Log out</span></Link>
                 </p>  :
 
@@ -48,7 +50,17 @@ class Login extends React.Component {
             }
          </div>
         )
+    }
 }
-}
+
+//export default Login;
+
+
+const Login = connect( state => ({
+    authorLogged: state.authorLogged
+  }), dispatch => ({
+      logUser: (username, password) => dispatch(checkLogin(username, password)),
+      logOut: () => dispatch(logOut())
+}))(LoginView)
 
 export default Login;
