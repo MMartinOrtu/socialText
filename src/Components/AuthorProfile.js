@@ -28,7 +28,7 @@ const AuthorProfileView = ({authorSelected, authorLogged, sendRequest}) =>
                             {
                             authorSelected.messages ?
                             authorSelected.messages.map(message =>(
-                                <p className="message-displayed" key={authorSelected.messages.indexOf(message)}>{message}</p>
+                                <p className="message-displayed" key={authorSelected.messages.indexOf(message)+Math.random()}>{message}</p>
                                 )):
                             <p>Este author aún no ha escrito ningún mensaje</p>
                             }
