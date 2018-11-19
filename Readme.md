@@ -4,7 +4,7 @@ This is  Bootcamp Web exercise of Keepcoding.
 
 SocialText is a social network that allow people to share messages.
 
-SocialText is a responsive web app and has been made using React.
+SocialText is a responsive web app and has been made using React and Redux.
 
 
 ## Installation

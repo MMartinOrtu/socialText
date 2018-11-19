@@ -107,7 +107,7 @@ export const saveMessage = (message) =>{
     }else{
       authorMessages.push(message);
       setAuthorMessagesToLS(authorLogged.id, authorMessages)
-    } 
+    }
     return { type: SAVE_MESSAGE, payload: authorMessages }
 }
 
