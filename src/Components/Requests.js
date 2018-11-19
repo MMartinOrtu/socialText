@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {toggleRequest} from '../index.js'
+import {toggleRequest} from '../Actions/index.js'
 import '../Styles/request.css';
 
 const RequestsView = ({authorLogged, toggleRequest}) =>

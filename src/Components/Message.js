@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {saveMessage} from '../index.js'
+import {saveMessage} from '../Actions/index.js'
 import '../Styles/message.css';
 
 class MessageView extends React.Component {

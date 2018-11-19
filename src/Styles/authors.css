@@ -5,4 +5,14 @@
     justify-content: space-around;
 }
 
+.author-img{
+    width: 110px;
+    border-radius: 10%;
+    transition: all 0.2s linear;
+    margin: 1px;
+}
+
+.author-img:hover{
+    border-radius: 50%;
+}
 

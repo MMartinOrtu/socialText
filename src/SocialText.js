@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Header from './Components/Header';
 import {connect} from 'react-redux';
-import {getAuthorsDatafromAPI} from './index';
+import {getAuthorsDatafromAPI} from './Actions/index';
 import Authors from './Components/Authors';
 import AuthorProfile from './Components/AuthorProfile';
 import Requests from './Components/Requests';

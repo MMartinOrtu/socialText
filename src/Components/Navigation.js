@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from 'react-redux';
-import {selectAuthor} from '../index.js'
+import {selectAuthor} from '../Actions/index.js'
 import '../Styles/navigation.css';
 
 const NavigationView = ({authorLogged, selectAuthor}) =>

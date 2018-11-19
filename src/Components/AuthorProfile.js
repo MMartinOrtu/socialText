@@ -1,7 +1,7 @@
 import React from 'react';
 import Message from './Message';
 import {connect} from 'react-redux';
-import {sendRequest} from '../index.js'
+import {sendRequest} from '../Actions/index.js'
 import '../Styles/profile.css'
 
 const AuthorProfileView = ({authorSelected, authorLogged, sendRequest}) =>
@@ -30,7 +30,7 @@ const AuthorProfileView = ({authorSelected, authorLogged, sendRequest}) =>
                             authorSelected.messages.map(message =>(
                                 <p className="message-displayed" key={authorSelected.messages.indexOf(message)+Math.random()}>{message}</p>
                                 )):
-                            <p>Este author aún no ha escrito ningún mensaje</p>
+                            <p>Este autor aún no ha escrito ningún mensaje</p>
                             }
                         </div>
                     </div>:

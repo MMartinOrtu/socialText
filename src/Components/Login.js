@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../Styles/login.css';
 import {connect} from 'react-redux';
-import {checkLogin, logOut} from '../index.js'
+import {checkLogin, logOut} from '../Actions/index.js'
 
 class LoginView extends React.Component {
     state = {
@@ -21,7 +21,8 @@ class LoginView extends React.Component {
     })
 
     render(){
-        const {author, loginError}= this.props.authorLogged
+        const {author, loginError, logingStarted}= this.props.authorLogged
+        const loadingAuthors = this.props.loadingAuthors
         return (
          <div className="login">
             {
@@ -29,7 +30,6 @@ class LoginView extends React.Component {
                 <p className="logged-message">¡Hola&nbsp;&nbsp;{author.fullname}!&nbsp;&nbsp;
                 <Link className="logout" to="/"><span  onClick={this.props.logOut}>Log out</span></Link>
                 </p>  :
-
                 <form className="login-form" onSubmit={this.submit}>
                     <div className="login-item">
                         <label>Ussuario:&nbsp;<input className="input-item" type= "text" value={this.state.login} onChange={(e) => this.changeState('login')(e)} autoComplete="username"/></label>
@@ -43,9 +43,8 @@ class LoginView extends React.Component {
                         loginError &&
                         <p className="error">Usuario o contraseña incorrectos</p>
                     }
-                        <input className="button-item" type="submit" value="Login" />
+                        <input className="button-item" type="submit" value="Login" disable={loadingAuthors || logingStarted} />
                     </div>
-
                 </form>
             }
          </div>
@@ -53,14 +52,12 @@ class LoginView extends React.Component {
     }
 }
 
-//export default Login;
-
-
 const Login = connect( state => ({
-    authorLogged: state.authorLogged
+    authorLogged: state.authorLogged,
+    loadingAuthors: state.authors.loading
   }), dispatch => ({
-      logUser: (username, password) => dispatch(checkLogin(username, password)),
-      logOut: () => dispatch(logOut())
+    logUser: (username, password) => dispatch(checkLogin(username, password)),
+    logOut: () => dispatch(logOut())
 }))(LoginView)
 
 export default Login;

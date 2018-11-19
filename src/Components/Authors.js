@@ -1,5 +1,5 @@
 import React from 'react';
-import {selectAuthor} from '../index.js'
+import {selectAuthor} from '../Actions/index.js'
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom';
 import '../Styles/authors.css';
